@@ -6,8 +6,8 @@ fi
 set -ex
 
 if [ "$1" != "base" ]; then
-    rm MyStrategy.py
-    cp -rn /src/* ./
+    rm src/main/java/MyStrategy.java
+    cp -rn /src/* src/main/java/
 fi
-python -m py_compile Runner.py
-cp -r * /output/
+mvn package --batch-mode
+cp target/java-cgdk-jar-with-dependencies.jar /output/

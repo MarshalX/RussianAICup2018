@@ -1,7 +1,6 @@
-FROM python:3.7.1
-
-RUN pip install numpy scipy
-RUN pip install https://download.pytorch.org/whl/cpu/torch-1.0.0-cp37-cp37m-linux_x86_64.whl
+FROM maven:3.6.0-jdk-8
 
 COPY . /project
 WORKDIR /project
+
+RUN mvn package --batch-mode
