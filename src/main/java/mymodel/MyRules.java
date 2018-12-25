@@ -39,40 +39,6 @@ public class MyRules {
     public int NITRO_PACK_RESPAWN_TICKS;
     public double GRAVITY;
 
-    public MyRules() {
-        MAX_TICK_COUNT = 0;
-        TEAM_SIZE = 0;
-        SEED = 0;
-        ROBOT_MIN_RADIUS = 0;
-        ROBOT_MAX_RADIUS = 0;
-        ROBOT_MAX_JUMP_SPEED = 0;
-        ROBOT_ACCELERATION = 0;
-        ROBOT_NITRO_ACCELERATION = 0;
-        ROBOT_MAX_GROUND_SPEED = 0;
-        ROBOT_ARENA_E = 0;
-        ROBOT_RADIUS = 0;
-        ROBOT_MASS = 0;
-        TICKS_PER_SECOND = 0;
-        MICROTICKS_PER_TICK = 0;
-        RESET_TICKS = 0;
-        BALL_ARENA_E = 0;
-        BALL_RADIUS = 0;
-        BALL_MASS = 0;
-        MIN_HIT_E = 0;
-        MAX_HIT_E = 0;
-        MAX_ENTITY_SPEED = 0;
-        MAX_NITRO_AMOUNT = 0;
-        START_NITRO_AMOUNT = 0;
-        NITRO_POINT_VELOCITY_CHANGE = 0;
-        NITRO_PACK_X = 0;
-        NITRO_PACK_Y = 0;
-        NITRO_PACK_Z = 0;
-        NITRO_PACK_RADIUS = 0;
-        NITRO_PACK_AMOUNT = 0;
-        NITRO_PACK_RESPAWN_TICKS = 0;
-        GRAVITY = 0;
-    }
-
     public MyRules(Rules rules) {
         arena = new MyArena(rules.arena);
 

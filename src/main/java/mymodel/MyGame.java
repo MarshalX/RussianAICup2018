@@ -5,51 +5,43 @@ import model.Game;
 
 
 public class MyGame {
-    private int current_tick;
+    private int currentTick;
     private MyPlayer[] players;
     private MyRobot[] robots;
-    private MyNitroPack[] nitro_packs;
+    private MyNitroPack[] nitroPacks;
     private MyBall ball;
 
-    public MyGame() {
-        current_tick = 0;
-        players = new MyPlayer[0];
-        robots = new MyRobot[0];
-        nitro_packs = new MyNitroPack[0];
-        ball = new MyBall();
-    }
-
     public MyGame(Game game) {
-        current_tick = game.current_tick;
+        currentTick = game.current_tick;
 
-        int players_count = game.players.length;
-        int robots_count = game.robots.length;
-        int nitro_packs_count = game.nitro_packs.length;
+        int playersCount = game.players.length;
+        int robotsCount = game.robots.length;
+        int nitroPacksCount = game.nitro_packs.length;
 
-        players = new MyPlayer[players_count];
-        for (int i = 0; i < players_count; ++i) {
+        players = new MyPlayer[playersCount];
+        for (int i = 0; i < playersCount; ++i) {
             players[i] = new MyPlayer(game.players[i]);
         }
 
-        robots = new MyRobot[robots_count];
-        for (int i = 0; i < robots_count; ++i) {
+        robots = new MyRobot[robotsCount];
+        for (int i = 0; i < robotsCount; ++i) {
             robots[i] = new MyRobot(game.robots[i]);
         }
 
-        nitro_packs = new MyNitroPack[nitro_packs_count];
-        for (int i = 0; i < nitro_packs_count; ++i) {
-            nitro_packs[i] = new MyNitroPack(game.nitro_packs[i]);
+        nitroPacks = new MyNitroPack[nitroPacksCount];
+        for (int i = 0; i < nitroPacksCount; ++i) {
+            nitroPacks[i] = new MyNitroPack(game.nitro_packs[i]);
         }
 
         ball = new MyBall(game.ball);
     }
 
-    public int getCurrent_tick() {
-        return current_tick;
+    public int getCurrentTick() {
+        return currentTick;
     }
 
-    public void setCurrent_tick(int current_tick) {
-        this.current_tick = current_tick;
+    public void setCurrentTick(int currentTick) {
+        this.currentTick = currentTick;
     }
 
     public MyPlayer[] getPlayers() {
@@ -68,12 +60,12 @@ public class MyGame {
         this.robots = robots;
     }
 
-    public MyNitroPack[] getNitro_packs() {
-        return nitro_packs;
+    public MyNitroPack[] getNitroPacks() {
+        return nitroPacks;
     }
 
-    public void setNitro_packs(MyNitroPack[] nitro_packs) {
-        this.nitro_packs = nitro_packs;
+    public void setNitroPacks(MyNitroPack[] nitroPacks) {
+        this.nitroPacks = nitroPacks;
     }
 
     public MyBall getBall() {

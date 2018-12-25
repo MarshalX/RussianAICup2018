@@ -9,21 +9,14 @@ import utils.Vec3D;
 public class MyNitroPack{
     private int id;
     private Vec3D position;
-    private double nitro_amount;
-    private Integer respawn_ticks;
-
-    public MyNitroPack() {
-        id = 0;
-        position = new Vec3D();
-        nitro_amount = 0;
-        respawn_ticks = 0;
-    }
+    private double nitroAmount;
+    private Integer respawnTicks;
 
     public MyNitroPack(NitroPack nitroPack) {
         id = nitroPack.id;
         position = new Vec3D(nitroPack.x, nitroPack.y, nitroPack.z);
-        nitro_amount = nitroPack.nitro_amount;
-        respawn_ticks = nitroPack.respawn_ticks;
+        nitroAmount = nitroPack.nitro_amount;
+        respawnTicks = nitroPack.respawn_ticks;
     }
 
     public int getId() {
@@ -42,19 +35,19 @@ public class MyNitroPack{
         this.position = position;
     }
 
-    public double getNitro_amount() {
-        return nitro_amount;
+    public double getNitroAmount() {
+        return nitroAmount;
     }
 
-    public void setNitro_amount(double nitro_amount) {
-        this.nitro_amount = nitro_amount;
+    public void setNitroAmount(double nitroAmount) {
+        this.nitroAmount = nitroAmount;
     }
 
-    public Integer getRespawn_ticks() {
-        return respawn_ticks;
+    public Integer getRespawnTicks() {
+        return respawnTicks;
     }
 
-    public void setRespawn_ticks(Integer respawn_ticks) {
-        this.respawn_ticks = respawn_ticks;
+    public void setRespawnTicks(Integer respawnTicks) {
+        this.respawnTicks = respawnTicks;
     }
 }

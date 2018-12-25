@@ -7,20 +7,13 @@ import model.Player;
 public class MyPlayer {
     private int id;
     private boolean me;
-    private boolean strategy_crashed;
+    private boolean strategyCrashed;
     private int score;
-
-    public MyPlayer() {
-        id = 0;
-        me = false;
-        strategy_crashed = false;
-        score = 0;
-    }
 
     public MyPlayer(Player player) {
         id = player.id;
         me = player.me;
-        strategy_crashed = player.strategy_crashed;
+        strategyCrashed = player.strategy_crashed;
         score = player.score;
     }
 
@@ -40,12 +33,12 @@ public class MyPlayer {
         this.me = me;
     }
 
-    public boolean isStrategy_crashed() {
-        return strategy_crashed;
+    public boolean isStrategyCrashed() {
+        return strategyCrashed;
     }
 
-    public void setStrategy_crashed(boolean strategy_crashed) {
-        this.strategy_crashed = strategy_crashed;
+    public void setStrategyCrashed(boolean strategyCrashed) {
+        this.strategyCrashed = strategyCrashed;
     }
 
     public int getScore() {

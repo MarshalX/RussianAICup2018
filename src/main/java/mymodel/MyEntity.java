@@ -10,18 +10,16 @@ public class MyEntity {
     private Vec3D velocity;
     private double radius;
 
-    public MyEntity() {
-        action = new MyAction();
-        position = new Vec3D();
-        velocity = new Vec3D();
-        radius = 0;
-    }
-
-    public MyEntity(MyAction action, Vec3D position, Vec3D velocity, double radius) {
-        this.action = action;
+    public MyEntity(Vec3D position, Vec3D velocity, double radius) {
         this.position = position;
         this.velocity = velocity;
         this.radius = radius;
+    }
+
+    public MyEntity(MyAction action, Vec3D position, Vec3D velocity, double radius) {
+        this(position, velocity, radius);
+
+        this.action = action;
     }
 
     public MyAction getAction() {

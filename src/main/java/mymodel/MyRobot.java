@@ -9,38 +9,26 @@ import utils.Vec3D;
 
 public class MyRobot extends MyEntity {
     private int id;
-    private int player_id;
+    private int playerId;
     private boolean teammate;
-    private double nitro_amount;
+    private double nitroAmount;
 
     private boolean touch;
-    private Vec3D touch_normal;
-
-    public MyRobot() {
-        super();
-
-        id = 0;
-        player_id = 0;
-        teammate = false;
-        nitro_amount = 0;
-
-        touch = false;
-        touch_normal = null;
-    }
+    private Vec3D touchNormal;
 
     public MyRobot(Robot robot) {
-        super(new MyAction(), new Vec3D(robot.x, robot.y, robot.z),
+        super(new Vec3D(robot.x, robot.y, robot.z),
                 new Vec3D(robot.velocity_x, robot.velocity_y, robot.velocity_z), robot.radius);
 
         id = robot.id;
-        player_id = robot.player_id;
+        playerId = robot.player_id;
         teammate = robot.is_teammate;
-        nitro_amount = robot.nitro_amount;
+        nitroAmount = robot.nitro_amount;
 
         touch = robot.touch;
 
         if (touch) {
-            touch_normal = new Vec3D(robot.touch_normal_x, robot.touch_normal_y, robot.touch_normal_z);
+            touchNormal = new Vec3D(robot.touch_normal_x, robot.touch_normal_y, robot.touch_normal_z);
         }
     }
 
@@ -59,27 +47,27 @@ public class MyRobot extends MyEntity {
     }
 
     public int getPlayerId() {
-        return player_id;
+        return playerId;
     }
 
-    public void setPlayerId(int player_id) {
-        this.player_id = player_id;
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
     }
 
     public boolean isTeammate() {
         return teammate;
     }
 
-    public void setTeammate(boolean is_teammate) {
-        this.teammate = is_teammate;
+    public void setTeammate(boolean isTeammate) {
+        this.teammate = isTeammate;
     }
 
     public double getNitroAmount() {
-        return nitro_amount;
+        return nitroAmount;
     }
 
-    public void setNitroAmount(double nitro_amount) {
-        this.nitro_amount = nitro_amount;
+    public void setNitroAmount(double nitroAmount) {
+        this.nitroAmount = nitroAmount;
     }
 
     public boolean isTouch() {
@@ -91,10 +79,10 @@ public class MyRobot extends MyEntity {
     }
 
     public Vec3D getTouchNormal() {
-        return touch_normal;
+        return touchNormal;
     }
 
-    public void setTouchNormal(Vec3D touch_normal) {
-        this.touch_normal = touch_normal;
+    public void setTouchNormal(Vec3D touchNormal) {
+        this.touchNormal = touchNormal;
     }
 }

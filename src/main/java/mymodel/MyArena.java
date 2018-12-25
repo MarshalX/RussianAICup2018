@@ -17,20 +17,6 @@ public class MyArena {
     public double GOAL_DEPTH;
     public double GOAL_SIDE_RADIUS;
 
-    public MyArena() {
-        WIDTH = 0;
-        HEIGHT = 0;
-        DEPTH = 0;
-        BOTTOM_RADIUS = 0;
-        TOP_RADIUS = 0;
-        CORNER_RADIUS = 0;
-        GOAL_TOP_RADIUS = 0;
-        GOAL_WIDTH = 0;
-        GOAL_HEIGHT = 0;
-        GOAL_DEPTH = 0;
-        GOAL_SIDE_RADIUS = 0;
-    }
-
     public MyArena(Arena arena) {
         WIDTH = arena.width;
         HEIGHT = arena.height;

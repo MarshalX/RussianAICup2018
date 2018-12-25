@@ -9,7 +9,7 @@ public final class MyStrategy implements Strategy {
 
     @Override
     public void act(Robot me, Rules rules, Game game, Action action) {
-        MyRobot myRobot = new MyRobot(me);
+        MyRobot myRobot = new MyRobot(action, me);
         MyRules myRules = new MyRules(rules);
         MyGame myGame = new MyGame(game);
         MyBall myBall = myGame.getBall();
@@ -22,9 +22,7 @@ public final class MyStrategy implements Strategy {
         Vec3D ballVel = myBall.getVelocity();
 
         if (!myRobot.isTouch()){
-            myAction.setTargetVelocityX(0);
-            myAction.setTargetVelocityY(-myRules.MAX_ENTITY_SPEED);
-            myAction.setTargetVelocityZ(0);
+            myAction.setTargetVelocity(new Vec3D(0, -myRules.MAX_ENTITY_SPEED, 0));
             myAction.setJumpSpeed(0);
 
             return;
@@ -46,20 +44,19 @@ public final class MyStrategy implements Strategy {
         if (isAttacker) {
             for (int i = 0; i != 100; ++i) {
                 double t = i * 0.1;
-                Vec3D surBallPos = ballPos.copy().add(ballVel).mul(t);
+                Vec3D surBallPos = ballPos.add(ballVel.mul(t));
 
                 if (surBallPos.getZ() > myPos.getZ()
                         && Math.abs(surBallPos.getX()) < (myRules.getArena().WIDTH / 2)
                         && Math.abs(surBallPos.getZ()) < (myRules.getArena().DEPTH / 2)) {
-                    Vec3D deltaPos = surBallPos.copy().sub(myPos);
+
+                    Vec3D deltaPos = surBallPos.sub(myPos);
                     double needSpeed = deltaPos.length() / t;
 
                     if (0.5 * myRules.ROBOT_MAX_GROUND_SPEED < needSpeed && needSpeed < myRules.ROBOT_MAX_GROUND_SPEED) {
-                        Vec3D targetVelocity = deltaPos.copy().normalize().mul(needSpeed);
+                        Vec3D targetVelocity = deltaPos.normalize().mul(needSpeed);
 
-                        myAction.setTargetVelocityX(targetVelocity.getX());
-                        myAction.setTargetVelocityY(0);
-                        myAction.setTargetVelocityZ(targetVelocity.getZ());
+                        myAction.setTargetVelocity(targetVelocity);
                         myAction.setJumpSpeed(jump ? myRules.ROBOT_MAX_JUMP_SPEED : 0);
 
                         return;
@@ -74,15 +71,13 @@ public final class MyStrategy implements Strategy {
             double x = ballPos.getX() + ballVel.getX() * t;
 
             if (Math.abs(x) < myRules.getArena().GOAL_WIDTH / 2) {
-                targetPos.setX(x);
+                targetPos = new Vec3D(x, targetPos.getY(), targetPos.getZ());
             }
         }
 
         Vec3D targetVelocity = targetPos.sub(myPos).mul(myRules.ROBOT_MAX_GROUND_SPEED);
 
-        myAction.setTargetVelocityX(targetVelocity.getX());
-        myAction.setTargetVelocityY(0);
-        myAction.setTargetVelocityZ(targetVelocity.getZ());
+        myAction.setTargetVelocity(targetVelocity);
         myAction.setJumpSpeed(jump ? myRules.ROBOT_MAX_JUMP_SPEED : 0);
     }
     

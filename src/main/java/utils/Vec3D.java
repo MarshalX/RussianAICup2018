@@ -5,9 +5,9 @@ import java.lang.Math;
 
 
 public class Vec3D {
-    private double x;
-    private double y;
-    private double z;
+    private final double x;
+    private final double y;
+    private final double z;
 
     public Vec3D() {
         x = 0;
@@ -32,43 +32,23 @@ public class Vec3D {
     }
 
     public Vec3D add(Vec3D vec) {
-        x += vec.getX();
-        y += vec.getY();
-        z += vec.getZ();
-
-        return this;
+        return new Vec3D(x + vec.getX(), y + vec.getY(), z + vec.getZ());
     }
 
     public Vec3D add(double dx, double dy, double dz) {
-        x += dx;
-        y += dy;
-        z += dz;
-
-        return this;
+        return new Vec3D(x + dx, y + dy, z + dz);
     }
 
     public Vec3D sub(Vec3D vec) {
-        x -= vec.getX();
-        y -= vec.getY();
-        z -= vec.getZ();
-
-        return this;
+        return new Vec3D(x - vec.getX(), y - vec.getY(), z - vec.getZ());
     }
 
     public Vec3D sub(double dx, double dy, double dz) {
-        x -= dx;
-        y -= dy;
-        z -= dz;
-
-        return this;
+        return new Vec3D(x - dx, y - dy, z - dz);
     }
 
     public Vec3D mul(double scalar) {
-        x *= scalar;
-        y *= scalar;
-        z *= scalar;
-
-        return this;
+        return new Vec3D(x * scalar, y * scalar, z * scalar);
     }
 
     public double length() {
@@ -100,11 +80,7 @@ public class Vec3D {
     }
 
     public Vec3D reverse() {
-        x = -x;
-        y = -y;
-        z = -z;
-
-        return this;
+        return new Vec3D(-x, -y, -z);
     }
 
     public double dotProduct(Vec3D vec) {
@@ -112,19 +88,7 @@ public class Vec3D {
     }
 
     public Vec3D div(double scalar) {
-        x /= scalar;
-        y /= scalar;
-        z /= scalar;
-
-        return this;
-    }
-
-    public Vec3D copyFrom(Vec3D vec) {
-        this.x = vec.x;
-        this.y = vec.y;
-        this.z = vec.z;
-
-        return this;
+        return new Vec3D(x / scalar, y / scalar, z / scalar);
     }
 
     @Override
@@ -136,23 +100,11 @@ public class Vec3D {
         return x;
     }
 
-    public void setX(double x) {
-        this.x = x;
-    }
-
     public double getY() {
         return y;
     }
 
-    public void setY(double y) {
-        this.y = y;
-    }
-
     public double getZ() {
         return z;
-    }
-
-    public void setZ(double z) {
-        this.z = z;
     }
 }
