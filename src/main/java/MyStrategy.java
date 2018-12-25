@@ -6,6 +6,7 @@ import utils.Vec3D;
 
 public final class MyStrategy implements Strategy {
     double EPS = 1e-5;
+    int toSimulate = 200;
 
     @Override
     public void act(Robot me, Rules rules, Game game, Action action) {
@@ -31,6 +32,13 @@ public final class MyStrategy implements Strategy {
         boolean jump = myPos.squareDistance(ballPos) < Math.pow(myRules.BALL_RADIUS + myRules.ROBOT_MAX_RADIUS, 2)
                 && myPos.getZ() < ballPos.getZ();
 
+        if (Math.abs(ballPos.getZ()) < EPS && Math.abs(ballPos.getX()) < EPS) {
+            myAction.setTargetVelocity(new Vec3D(0, 0, 0).sub(myPos).mul(myRules.ROBOT_MAX_GROUND_SPEED));
+            myAction.setJumpSpeed(jump ? myRules.ROBOT_MAX_JUMP_SPEED : 0);
+
+            return;
+        }
+
         boolean isAttacker = myGame.getRobots().length == 2;
 
         for (MyRobot robot: myGame.getRobots()) {
@@ -41,10 +49,48 @@ public final class MyStrategy implements Strategy {
             }
         }
 
+        if (ballPos.getZ() > EPS - 1) {
+            isAttacker = true;
+            toSimulate = 50;
+        }
+
         if (isAttacker) {
-            for (int i = 0; i != 100; ++i) {
+            for (int i = 0; i != toSimulate; ++i) {
                 double t = i * 0.1;
+
                 Vec3D surBallPos = ballPos.add(ballVel.mul(t));
+                Vec3D myPos2D = new Vec3D(myPos.getX(), 0, myPos.getZ());
+                Vec3D ballPos2D = new Vec3D(ballPos.getX(), 0, ballPos.getZ());
+                Vec3D goalPos = new Vec3D(0, 0, 40);
+
+                if (ballPos2D.getZ() > myPos2D.getZ() &&
+                        ballPos2D.squareDistance(myPos2D) > Math.pow(myRules.BALL_RADIUS, 2)) {
+                    Vec3D deltaPos = ballPos2D.sub(myPos2D);
+                    double needSpeed = deltaPos.length() / t;
+
+                    if (0.8 * myRules.ROBOT_MAX_GROUND_SPEED < needSpeed && needSpeed < myRules.ROBOT_MAX_GROUND_SPEED) {
+                        Vec3D targetVelocity = deltaPos.normalize().mul(needSpeed);
+
+                        myAction.setTargetVelocity(targetVelocity);
+                        myAction.setJumpSpeed(jump ? myRules.ROBOT_MAX_JUMP_SPEED : 0);
+
+                        return;
+                    }
+
+                } else {
+                    Vec3D ballToGoal = ballPos2D.sub(goalPos);
+                    Vec3D deltaPos = ballToGoal.sub(myPos2D);
+                    double needSpeed = deltaPos.length() / t;
+
+                    if (0.65 * myRules.ROBOT_MAX_GROUND_SPEED < needSpeed && needSpeed < myRules.ROBOT_MAX_GROUND_SPEED) {
+                        Vec3D targetVelocity = deltaPos.normalize().mul(myRules.ROBOT_MAX_GROUND_SPEED);
+
+                        myAction.setTargetVelocity(targetVelocity);
+                        myAction.setJumpSpeed(jump ? myRules.ROBOT_MAX_JUMP_SPEED : 0);
+
+                        return;
+                    }
+                }
 
                 if (surBallPos.getZ() > myPos.getZ()
                         && Math.abs(surBallPos.getX()) < (myRules.getArena().WIDTH / 2)
@@ -53,7 +99,7 @@ public final class MyStrategy implements Strategy {
                     Vec3D deltaPos = surBallPos.sub(myPos);
                     double needSpeed = deltaPos.length() / t;
 
-                    if (0.5 * myRules.ROBOT_MAX_GROUND_SPEED < needSpeed && needSpeed < myRules.ROBOT_MAX_GROUND_SPEED) {
+                    if (needSpeed < myRules.ROBOT_MAX_GROUND_SPEED) {
                         Vec3D targetVelocity = deltaPos.normalize().mul(needSpeed);
 
                         myAction.setTargetVelocity(targetVelocity);
@@ -76,6 +122,8 @@ public final class MyStrategy implements Strategy {
         }
 
         Vec3D targetVelocity = targetPos.sub(myPos).mul(myRules.ROBOT_MAX_GROUND_SPEED);
+
+        targetVelocity = new Vec3D(targetVelocity.getX(), 0, targetVelocity.getZ());
 
         myAction.setTargetVelocity(targetVelocity);
         myAction.setJumpSpeed(jump ? myRules.ROBOT_MAX_JUMP_SPEED : 0);

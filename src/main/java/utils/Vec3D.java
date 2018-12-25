@@ -59,10 +59,26 @@ public class Vec3D {
         return this.mul((1 / this.length()));
     }
 
+    public double distance(Vec3D vec) {
+        double tx = x - vec.x;
+        double ty = y - vec.y;
+        double tz = z - vec.z;
+
+        return Math.sqrt(tx * tx + ty * ty + tz * tz);
+    }
+
+    public double distance(double x, double y, double z) {
+        double tx = this.x - x;
+        double ty = this.y - y;
+        double tz = this.z - z;
+
+        return Math.sqrt(tx * tx + ty * ty + tz * tz);
+    }
+
     public double squareDistance(Vec3D vec) {
         double tx = x - vec.x;
         double ty = y - vec.y;
-        double tz = y - vec.z;
+        double tz = z - vec.z;
 
         return tx * tx + ty * ty + tz * tz;
     }
