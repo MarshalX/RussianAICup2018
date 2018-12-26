@@ -27,6 +27,7 @@ public class MyRules {
     public double BALL_MASS;
     public double MIN_HIT_E;
     public double MAX_HIT_E;
+    public double AVG_HIT_E;
     public double MAX_ENTITY_SPEED;
     public double MAX_NITRO_AMOUNT;
     public double START_NITRO_AMOUNT;
@@ -62,6 +63,7 @@ public class MyRules {
         BALL_MASS = rules.BALL_MASS;
         MIN_HIT_E = rules.MIN_HIT_E;
         MAX_HIT_E = rules.MAX_HIT_E;
+        AVG_HIT_E = (MIN_HIT_E + MAX_HIT_E) / 2;
         MAX_ENTITY_SPEED = rules.MAX_ENTITY_SPEED;
         MAX_NITRO_AMOUNT = rules.MAX_NITRO_AMOUNT;
         START_NITRO_AMOUNT = rules.START_NITRO_AMOUNT;

@@ -14,6 +14,10 @@ public class MyAction {
     private double jumpSpeed;
     private boolean useNitro;
 
+    public MyAction() {
+        jumpSpeed = 0;
+    }
+
     public MyAction(Action action) {
         this.action = action;
 

@@ -11,12 +11,14 @@ public class MyNitroPack{
     private Vec3D position;
     private double nitroAmount;
     private Integer respawnTicks;
+    private boolean alive;
 
     public MyNitroPack(NitroPack nitroPack) {
         id = nitroPack.id;
         position = new Vec3D(nitroPack.x, nitroPack.y, nitroPack.z);
         nitroAmount = nitroPack.nitro_amount;
         respawnTicks = nitroPack.respawn_ticks;
+        alive = true;
     }
 
     public int getId() {
@@ -49,5 +51,13 @@ public class MyNitroPack{
 
     public void setRespawnTicks(Integer respawnTicks) {
         this.respawnTicks = respawnTicks;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 }

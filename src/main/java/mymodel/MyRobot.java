@@ -4,6 +4,7 @@ package mymodel;
 import model.Action;
 import model.Robot;
 
+import model.Rules;
 import utils.Vec3D;
 
 
@@ -16,7 +17,7 @@ public class MyRobot extends MyEntity {
     private boolean touch;
     private Vec3D touchNormal;
 
-    public MyRobot(Robot robot) {
+    public MyRobot(Robot robot, Rules rules) {
         super(new Vec3D(robot.x, robot.y, robot.z),
                 new Vec3D(robot.velocity_x, robot.velocity_y, robot.velocity_z), robot.radius);
 
@@ -30,10 +31,13 @@ public class MyRobot extends MyEntity {
         if (touch) {
             touchNormal = new Vec3D(robot.touch_normal_x, robot.touch_normal_y, robot.touch_normal_z);
         }
+
+        MASS = rules.ROBOT_MASS;
+        ARENA_E  = rules.ROBOT_ARENA_E;
     }
 
-    public MyRobot(Action action, Robot robot) {
-        this(robot);
+    public MyRobot(Action action, Robot robot, Rules rules) {
+        this(robot, rules);
 
         setAction(new MyAction(action));
     }

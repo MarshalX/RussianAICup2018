@@ -10,6 +10,9 @@ public class MyEntity {
     private Vec3D velocity;
     private double radius;
 
+    public double MASS;
+    public double ARENA_E;
+
     public MyEntity(Vec3D position, Vec3D velocity, double radius) {
         this.position = position;
         this.velocity = velocity;

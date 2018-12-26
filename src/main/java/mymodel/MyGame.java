@@ -2,6 +2,7 @@ package mymodel;
 
 
 import model.Game;
+import model.Rules;
 
 
 public class MyGame {
@@ -11,7 +12,7 @@ public class MyGame {
     private MyNitroPack[] nitroPacks;
     private MyBall ball;
 
-    public MyGame(Game game) {
+    public MyGame(Game game, Rules rules) {
         currentTick = game.current_tick;
 
         int playersCount = game.players.length;
@@ -25,7 +26,7 @@ public class MyGame {
 
         robots = new MyRobot[robotsCount];
         for (int i = 0; i < robotsCount; ++i) {
-            robots[i] = new MyRobot(game.robots[i]);
+            robots[i] = new MyRobot(game.robots[i], rules);
         }
 
         nitroPacks = new MyNitroPack[nitroPacksCount];
@@ -33,7 +34,7 @@ public class MyGame {
             nitroPacks[i] = new MyNitroPack(game.nitro_packs[i]);
         }
 
-        ball = new MyBall(game.ball);
+        ball = new MyBall(game.ball, rules);
     }
 
     public int getCurrentTick() {

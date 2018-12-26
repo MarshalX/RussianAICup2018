@@ -10,9 +10,9 @@ public final class MyStrategy implements Strategy {
 
     @Override
     public void act(Robot me, Rules rules, Game game, Action action) {
-        MyRobot myRobot = new MyRobot(action, me);
         MyRules myRules = new MyRules(rules);
-        MyGame myGame = new MyGame(game);
+        MyRobot myRobot = new MyRobot(action, me, rules);
+        MyGame myGame = new MyGame(game, rules);
         MyBall myBall = myGame.getBall();
         MyAction myAction = new MyAction(action);
 
