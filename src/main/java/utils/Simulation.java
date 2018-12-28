@@ -205,6 +205,8 @@ public class Simulation {
     private DistanceAndNormal danToArenaQuarter(Vec3D point) {
         MyArena arena = rules.getArena();
 
+        Vec3D v, o;
+
         // Ground
         DistanceAndNormal dan = danToPlane(point, new Vec3D(0, 0, 0), new Vec3D(0, 1, 0));
 
@@ -219,7 +221,7 @@ public class Simulation {
                 new Vec3D(0, 0, arena.DEPTH / 2 + arena.GOAL_DEPTH), new Vec3D(0, 0, -1)));
 
         // Size z
-        Vec3D v = new Vec3D(point.getX(), point.getY(), 0).sub(new Vec3D(
+        v = new Vec3D(point.getX(), point.getY(), 0).sub(new Vec3D(
                 arena.GOAL_WIDTH / 2 - arena.GOAL_TOP_RADIUS,
                 arena.GOAL_HEIGHT - arena.GOAL_TOP_RADIUS,
                 0));
@@ -238,7 +240,114 @@ public class Simulation {
             dan = dan.min(danToPlane(point, new Vec3D(0, arena.GOAL_HEIGHT, 0), new Vec3D(0, -1, 0)));
         }
 
-        // TODO: На следующей паре ;D
+        // Goal back corners
+        if (point.getZ() > arena.BOTTOM_RADIUS / 2 + arena.GOAL_DEPTH - arena.BOTTOM_RADIUS) {
+            dan = dan.min(danToSphereInner(
+                    point,
+                    new Vec3D(
+                            clamp(
+                                    point.getX(),
+                                    arena.BOTTOM_RADIUS - arena.GOAL_WIDTH / 2,
+                                    arena.GOAL_WIDTH / 2 - arena.BOTTOM_RADIUS
+                            ),
+                            clamp(
+                                    point.getY(),
+                                    arena.BOTTOM_RADIUS,
+                                    arena.GOAL_HEIGHT - arena.GOAL_TOP_RADIUS
+                            ),
+                            arena.DEPTH / 2 + arena.GOAL_DEPTH - arena.BOTTOM_RADIUS
+                    ),
+                    arena.BOTTOM_RADIUS
+            ));
+        }
+
+        // Corner
+        if (point.getX() > arena.WIDTH / 2 - arena.CORNER_RADIUS
+                && point.getZ() > arena.DEPTH / 2 - arena.CORNER_RADIUS) {
+            dan = dan.min(danToSphereInner(
+                    point,
+                    new Vec3D(
+                            arena.WIDTH / 2 - arena.CORNER_RADIUS,
+                            point.getY(),
+                            arena.DEPTH / 2 - arena.CORNER_RADIUS
+                    ),
+                    arena.CORNER_RADIUS
+            ));
+        }
+
+        // Goal outer corner
+        if (point.getZ() < arena.DEPTH / 2 + arena.GOAL_SIDE_RADIUS) {
+            // Side x
+            if (point.getX() < arena.GOAL_WIDTH / 2 + arena.GOAL_SIDE_RADIUS) {
+                dan = dan.min(danToSphereOuter(
+                        point,
+                        new Vec3D(
+                                arena.GOAL_WIDTH / 2 + arena.GOAL_SIDE_RADIUS,
+                                point.getY(),
+                                arena.DEPTH / 2 + arena.GOAL_SIDE_RADIUS
+                        ),
+                        arena.GOAL_SIDE_RADIUS
+                ));
+            }
+            // Celling
+            if (point.getY() < arena.GOAL_HEIGHT + arena.GOAL_SIDE_RADIUS) {
+                dan = dan.min(danToSphereOuter(
+                        point,
+                        new Vec3D(
+                                point.getX(),
+                                arena.GOAL_HEIGHT + arena.GOAL_SIDE_RADIUS,
+                                arena.DEPTH / 2 + arena.GOAL_SIDE_RADIUS
+                        ),
+                        arena.GOAL_SIDE_RADIUS
+                ));
+                // Top corner
+                o = new Vec3D(
+                        arena.GOAL_WIDTH / 2 - arena.GOAL_TOP_RADIUS,
+                        arena.GOAL_HEIGHT - arena.GOAL_TOP_RADIUS,
+                        0);
+                v = new Vec3D(point.getX(), point.getY(), 0).sub(o);
+                if (v.getX() > 0 && v.getY() > 0) {
+                    o = o.add(v.normalize().mul(arena.GOAL_TOP_RADIUS + arena.GOAL_SIDE_RADIUS));
+                    dan = dan.min(danToSphereOuter(
+                            point,
+                            new Vec3D(o.getX(), o.getY(), arena.DEPTH / 2 + arena.GOAL_SIDE_RADIUS),
+                            arena.GOAL_SIDE_RADIUS
+                    ));
+                }
+            }
+        }
+
+        // Goal inside top corners
+        if (point.getZ() > arena.DEPTH / 2 + arena.GOAL_SIDE_RADIUS
+                && point.getY() > arena.GOAL_HEIGHT - arena.GOAL_TOP_RADIUS) {
+            // Side x
+            if (point.getX() > arena.GOAL_WIDTH / 2 - arena.GOAL_TOP_RADIUS) {
+                dan = dan.min(danToSphereInner(
+                        point,
+                        new Vec3D(
+                                arena.GOAL_WIDTH / 2 - arena.GOAL_TOP_RADIUS,
+                                arena.GOAL_HEIGHT - arena.GOAL_TOP_RADIUS,
+                                point.getZ()
+                        ),
+                        arena.GOAL_TOP_RADIUS
+                ));
+            }
+            // Side z
+            if (point.getZ() > arena.DEPTH / 2 + arena.GOAL_DEPTH - arena.GOAL_TOP_RADIUS) {
+                dan = dan.min(danToSphereInner(
+                        point,
+                        new Vec3D(
+                                point.getX(),
+                                arena.GOAL_HEIGHT - arena.GOAL_TOP_RADIUS,
+                                arena.DEPTH / 2 + arena.GOAL_DEPTH - arena.GOAL_TOP_RADIUS
+                        ),
+                        arena.GOAL_TOP_RADIUS
+                ));
+            }
+        }
+
+        // Bottom corners
+        // TODO: Минус обед. Через пару :(
 
         return dan;
     }
