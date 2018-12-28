@@ -85,7 +85,83 @@ public class Simulation {
 
     private void update(double deltaTime) {
 //        shaffle(game.getRobots());
-        // TODO...
+
+        for (MyRobot robot: game.getRobots()) {
+            Vec3D targetVelocityChange, newVelocity;
+            if (robot.isTouch()) {
+                Vec3D targetVelocity = clamp(robot.getAction().getTargetVelocity(), rules.ROBOT_MAX_GROUND_SPEED);
+                targetVelocity.sub(robot.getTouchNormal().mul(robot.getTouchNormal().dotProduct(targetVelocity)));
+
+                targetVelocityChange = targetVelocity.sub(robot.getVelocity());
+                if (targetVelocityChange.length() > 0) {
+                    double acceleration = rules.ROBOT_ACCELERATION * Math.max(0, robot.getTouchNormal().getY());
+
+                    newVelocity = robot.getVelocity().add(clamp(
+                            targetVelocityChange.normalize().mul(acceleration).mul(deltaTime),
+                            targetVelocityChange.length()));
+
+                    robot.setVelocity(newVelocity);
+                }
+            }
+
+            if (robot.getAction().isUseNitro()) {
+                targetVelocityChange = clamp(
+                        robot.getAction().getTargetVelocity().sub(robot.getVelocity()),
+                        robot.getNitroAmount() * rules.ROBOT_NITRO_ACCELERATION);
+                if (targetVelocityChange.length() > 0) {
+                    Vec3D acceleration = targetVelocityChange.normalize().mul(rules.ROBOT_NITRO_ACCELERATION);
+                    Vec3D velocityChange = clamp(acceleration.mul(deltaTime), targetVelocityChange.length());
+
+                    robot.setVelocity(robot.getVelocity().add(velocityChange));
+                    robot.setNitroAmount(
+                            robot.getNitroAmount() - velocityChange.length() / rules.NITRO_POINT_VELOCITY_CHANGE);
+                }
+            }
+
+            move(robot, deltaTime);
+            robot.setRadius(rules.ROBOT_MIN_RADIUS + (rules.ROBOT_MAX_RADIUS - rules.ROBOT_MIN_RADIUS)
+                    * robot.getAction().getJumpSpeed() / rules.ROBOT_MAX_JUMP_SPEED);
+        }
+
+        move(game.getBall(), deltaTime);
+
+        for (int i = 0; i < game.getRobots().length; ++i) {
+            for (int j = 0; j < i - 1; ++j) {
+                collideEntities(game.getRobots()[i], game.getRobots()[j]);
+            }
+        }
+
+        for (MyRobot robot: game.getRobots()) {
+            collideEntities(robot, game.getBall());
+            Vec3D collisionNormal = collideWithArena(robot);
+            if (collisionNormal == null) {
+                robot.setTouch(false);
+            } else {
+                robot.setTouch(true);
+                robot.setTouchNormal(collisionNormal);
+            }
+        }
+
+        collideWithArena(game.getBall());
+
+        if (Math.abs(game.getBall().getPosition().getZ()) > rules.getArena().DEPTH / 2 + game.getBall().getRadius()) {
+//            goal_scored();
+        }
+
+        for (MyRobot robot: game.getRobots()) {
+            if (robot.getNitroAmount() == rules.MAX_NITRO_AMOUNT) {
+                continue;
+            }
+
+            for (MyNitroPack pack: game.getNitroPacks()) {
+                if (robot.getPosition().sub(pack.getPosition()).length() <= robot.getRadius() + rules.NITRO_PACK_RADIUS) {
+                    robot.setNitroAmount(rules.MAX_NITRO_AMOUNT);
+                    pack.setAlive(false);
+                    pack.setRespawnTicks(rules.NITRO_PACK_RESPAWN_TICKS);
+                }
+            }
+
+        }
     }
 
     private void tick() {
@@ -127,8 +203,44 @@ public class Simulation {
     }
 
     private DistanceAndNormal danToArenaQuarter(Vec3D point) {
-        // TODO: Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        return new DistanceAndNormal();
+        MyArena arena = rules.getArena();
+
+        // Ground
+        DistanceAndNormal dan = danToPlane(point, new Vec3D(0, 0, 0), new Vec3D(0, 1, 0));
+
+        // Ceiling
+        dan = dan.min(danToPlane(point, new Vec3D(0, arena.HEIGHT, 0), new Vec3D(0, -1, 0)));
+
+        // Side x
+        dan = dan.min(danToPlane(point, new Vec3D(arena.WIDTH / 2, 0, 0), new Vec3D(-1, 0, 0)));
+
+        // Side z (goal)
+        dan = dan.min(danToPlane(point,
+                new Vec3D(0, 0, arena.DEPTH / 2 + arena.GOAL_DEPTH), new Vec3D(0, 0, -1)));
+
+        // Size z
+        Vec3D v = new Vec3D(point.getX(), point.getY(), 0).sub(new Vec3D(
+                arena.GOAL_WIDTH / 2 - arena.GOAL_TOP_RADIUS,
+                arena.GOAL_HEIGHT - arena.GOAL_TOP_RADIUS,
+                0));
+        if (point.getX() >= arena.GOAL_HEIGHT + arena.GOAL_SIDE_RADIUS
+                || point.getY() >= arena.GOAL_HEIGHT + arena.GOAL_SIDE_RADIUS
+                || (v.getX() > 0 && v.getY() > 0 && v.length() >= arena.GOAL_TOP_RADIUS + arena.GOAL_SIDE_RADIUS)) {
+            dan = dan.min(danToPlane(point, new Vec3D(0, 0, arena.DEPTH / 2), new Vec3D(0, 0, -1)));
+        }
+
+        // Side x & ceiling (goal)
+        if (point.getZ() >= arena.DEPTH / 2 + arena.GOAL_SIDE_RADIUS) {
+            // x
+            dan = dan.min(
+                    danToPlane(point, new Vec3D(arena.GOAL_WIDTH / 2, 0, 0), new Vec3D(-1, 0, 0)));
+            // y
+            dan = dan.min(danToPlane(point, new Vec3D(0, arena.GOAL_HEIGHT, 0), new Vec3D(0, -1, 0)));
+        }
+
+        // TODO: На следующей паре ;D
+
+        return dan;
     }
 
     private DistanceAndNormal danToArena(Vec3D point) {
