@@ -15,7 +15,9 @@ public class MyAction {
     private boolean useNitro;
 
     public MyAction() {
+        targetVelocity = new Vec3D(0, 0, 0);
         jumpSpeed = 0;
+        useNitro = false;
     }
 
     public MyAction(Action action) {

@@ -1,10 +1,44 @@
+import com.google.gson.Gson;
+
 import model.*;
 import mymodel.*;
 
+import utils.Simulation;
 import utils.Vec3D;
 
 
+class Sphere {
+    JsonSphere Sphere;
+
+    public Sphere(JsonSphere jsonBall) {
+        Sphere = jsonBall;
+    }
+}
+
+class JsonSphere {
+    double x;
+    double y;
+    double z;
+
+    double radius = 3;
+
+    double r = 1.0;
+    double g = 0.0;
+    double b = 0.0;
+
+    double a = 0.5;
+
+    public JsonSphere(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+}
+
 public final class MyStrategy implements Strategy {
+    Gson gson = new Gson();
+    Sphere[] path = new Sphere[300];
+
     double EPS = 1e-5;
     int toSimulate = 200;
 
@@ -21,6 +55,14 @@ public final class MyStrategy implements Strategy {
 
         Vec3D ballPos = myBall.getPosition();
         Vec3D ballVel = myBall.getVelocity();
+
+        Simulation sim = new Simulation(myRules, myGame);
+        for (int i = 0; i < 300; ++i) {
+            sim.tick();
+
+            Vec3D pos = myGame.getBall().getPosition();
+            path[i] = new Sphere(new JsonSphere(pos.getX(), pos.getY(), pos.getZ()));
+        }
 
         if (!myRobot.isTouch()){
             myAction.setTargetVelocity(new Vec3D(0, -myRules.MAX_ENTITY_SPEED, 0));
@@ -131,6 +173,6 @@ public final class MyStrategy implements Strategy {
     
     @Override
     public String customRendering() {
-        return "";
+        return gson.toJson(path);
     }
 }

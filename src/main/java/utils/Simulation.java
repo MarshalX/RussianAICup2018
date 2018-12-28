@@ -21,7 +21,7 @@ public class Simulation {
         return vec;
     }
 
-    private double clamp(double min, double x, double max) {
+    private double clamp(double x, double min, double max) {
         return Math.max(min, Math.min(x, max));
     }
 
@@ -164,7 +164,7 @@ public class Simulation {
         }
     }
 
-    private void tick() {
+    public void tick() {
         double deltaTime = 1 / rules.TICKS_PER_SECOND;
 
         for(int i = 0; i < rules.MICROTICKS_PER_TICK; ++i) {
