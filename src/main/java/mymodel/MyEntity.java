@@ -14,7 +14,7 @@ public class MyEntity {
     public double ARENA_E;
 
     public MyEntity(Vec3D position, Vec3D velocity, double radius) {
-        this.action = new MyAction();
+        this.action = new MyAction(velocity);
         this.position = position;
         this.velocity = velocity;
         this.radius = radius;

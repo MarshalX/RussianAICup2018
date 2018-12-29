@@ -10,7 +10,6 @@ public class Simulation {
 
     public Simulation(MyRules rules, MyGame game) {
         this.rules = rules;
-        // TODO: copy of object...
         this.game = game;
     }
 
@@ -310,9 +309,9 @@ public class Simulation {
                         arena.GOAL_WIDTH / 2 - arena.GOAL_TOP_RADIUS,
                         arena.GOAL_HEIGHT - arena.GOAL_TOP_RADIUS,
                         0);
-                v = new Vec3D(point.getX(), point.getY(), 0).sub(o);
-                if (v.getX() > 0 && v.getY() > 0) {
-                    o = o.add(v.normalize().mul(arena.GOAL_TOP_RADIUS + arena.GOAL_SIDE_RADIUS));
+                Vec3D v2 = new Vec3D(point.getX(), point.getY(), 0).sub(o);
+                if (v2.getX() > 0 && v2.getY() > 0) {
+                    o = o.add(v2.normalize().mul(arena.GOAL_TOP_RADIUS + arena.GOAL_SIDE_RADIUS));
                     dan = dan.min(danToSphereOuter(
                             point,
                             new Vec3D(o.getX(), o.getY(), arena.DEPTH / 2 + arena.GOAL_SIDE_RADIUS),
@@ -395,9 +394,9 @@ public class Simulation {
                     arena.GOAL_WIDTH / 2 + arena.GOAL_SIDE_RADIUS,
                     arena.DEPTH / 2 + arena.GOAL_SIDE_RADIUS,
                     0);
-            v = new Vec3D(point.getX(), point.getZ(), 0).sub(o);
-            if (v.getX() < 0 && v.getY() < 0 && v.length() < arena.GOAL_SIDE_RADIUS + arena.BOTTOM_RADIUS) {
-                o = o.add(v.normalize().mul(arena.GOAL_SIDE_RADIUS + arena.BOTTOM_RADIUS));
+            Vec3D v2 = new Vec3D(point.getX(), point.getZ(), 0).sub(o);
+            if (v2.getX() < 0 && v2.getY() < 0 && v2.length() < arena.GOAL_SIDE_RADIUS + arena.BOTTOM_RADIUS) {
+                o = o.add(v2.normalize().mul(arena.GOAL_SIDE_RADIUS + arena.BOTTOM_RADIUS));
                 dan = dan.min(danToSphereInner(
                         point,
                         new Vec3D(o.getX(), arena.BOTTOM_RADIUS, o.getY()),
@@ -493,27 +492,27 @@ public class Simulation {
         boolean negativeZ = point.getZ() < 0;
 
         if (negativeX) {
-            point = new Vec3D(-point.getX(), point.getY(), point.getZ());
+            point = point.reverseX();
         }
         if (negativeZ) {
-            point = new Vec3D(point.getX(), point.getY(), -point.getZ());
+            point = point.reverseZ();
         }
 
         DistanceAndNormal result = danToArenaQuarter(point);
 
         Vec3D normal = result.getNormal();
         if (negativeX) {
-            result.setNormal(new Vec3D(-normal.getX(), normal.getY(), normal.getZ()));
+            result.setNormal(normal.reverseX());
         }
         if (negativeZ) {
-            result.setNormal(new Vec3D(normal.getX(), normal.getY(), -normal.getZ()));
+            result.setNormal(normal.reverseZ());
         }
 
         if (negativeX) {
-            point = new Vec3D(-point.getX(), point.getY(), point.getZ());
+            point = point.reverseX();
         }
         if (negativeZ) {
-            point = new Vec3D(point.getX(), point.getY(), -point.getZ());
+            point = point.reverseZ();
         }
 
         return result;

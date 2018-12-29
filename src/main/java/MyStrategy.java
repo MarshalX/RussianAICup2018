@@ -48,7 +48,7 @@ public final class MyStrategy implements Strategy {
 
         Simulation sim = new Simulation(myRules, myGame);
         for (int i = 0; i < 200; ++i) {
-            sim.tick(10);
+            sim.tick(5);
 
             ballPos = myGame.getBall().getPosition();
             path[i] = new Sphere(new JsonSphere(ballPos.getX(), ballPos.getY(), ballPos.getZ()));

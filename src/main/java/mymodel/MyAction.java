@@ -14,6 +14,12 @@ public class MyAction {
     private double jumpSpeed;
     private boolean useNitro;
 
+    public MyAction(Vec3D targetVelocity) {
+        this();
+
+        this.targetVelocity = targetVelocity;
+    }
+
     public MyAction() {
         targetVelocity = new Vec3D(0, 0, 0);
         jumpSpeed = 0;

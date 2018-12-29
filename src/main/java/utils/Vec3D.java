@@ -99,6 +99,18 @@ public class Vec3D {
         return new Vec3D(-x, -y, -z);
     }
 
+    public Vec3D reverseX() {
+        return new Vec3D(-x, y, z);
+    }
+
+    public Vec3D reverseY() {
+        return new Vec3D(x, -y, z);
+    }
+
+    public Vec3D reverseZ() {
+        return new Vec3D(x, y, -z);
+    }
+
     public double dotProduct(Vec3D vec) {
         return x * vec.x + y * vec.y + z * vec.z;
     }
