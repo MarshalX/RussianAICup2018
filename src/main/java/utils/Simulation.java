@@ -502,18 +502,12 @@ public class Simulation {
 
         Vec3D normal = result.getNormal();
         if (negativeX) {
-            result.setNormal(normal.reverseX());
+            normal = normal.reverseX();
         }
         if (negativeZ) {
-            result.setNormal(normal.reverseZ());
+            normal = normal.reverseZ();
         }
-
-        if (negativeX) {
-            point = point.reverseX();
-        }
-        if (negativeZ) {
-            point = point.reverseZ();
-        }
+        result.setNormal(normal);
 
         return result;
     }
